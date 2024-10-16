@@ -22,88 +22,86 @@ To write a program to predict the profit of a city using the linear regression m
 ```
 /*
 Program to implement the linear regression using gradient descent.
-Developed by:    SURESH S
+Developed by:    Suresh S
 RegisterNumber:  212223040215
-
 */
 ```
 ```
-
-
-
 import numpy as np
 import pandas as pd
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 
-dataset = pd.read_csv("/content/student_scores.csv")
+def multivariate_linear_regression(X1, Y, learning_rate=0.01, num_iters=1000):
+  X=np.c_[np.ones(len(X1)),X1]
+  theta=np.zeros(X.shape[1]).reshape(-1,1)
+  for _ in range(num_iters):
+        predictions=(X).dot(theta).reshape(-1,1)
+        errors=(predictions-Y).reshape(-1,1)
+        theta-=learning_rate*(1/len(X1))*X.T.dot(errors)
+  return theta
+dataset = pd.read_csv("/content/50_Startups.csv")
 print(dataset.head())
 print(dataset.tail())
+
 ```
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/53cb77bb-109a-4787-b525-3f36a2e37012">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/618a38a2-24fc-4bdc-a075-6e61dc918a3a">
+
 
 ```
 dataset.info()
 ```
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/bb6bf5ea-11d2-4d72-8390-3c9e4e8cfbca">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/e6c80c73-3326-4ac0-8b7d-315b97ccc6b4">
+
 
 ```
 dataset.describe()
 ```
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/dabba87b-87bb-4bf9-8d3a-36a5e283b3fc">
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/723c0d40-2355-44c0-8800-18f8db2079fc">
+
 
 ```
-x=dataset.iloc[:,:-1].values
+x=dataset.iloc[:,:-2].values
+y=(dataset.iloc[:,-1].values).reshape(-1,1)
+```
+
+
+
+```
 print(x)
-y=dataset.iloc[:,-1].values
+```
+
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/306b25d6-c44c-4588-9c4b-30f91ed62adc">
+
+
+
+
+
+```
 print(y)
 ```
-
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/c018ea92-4541-4415-8550-92950559c8e6">
-
-```
-x.shape
-```
-
-<img width="400" alt="image" src="https://github.com/user-attachments/assets/6ab9d665-2e28-4454-889a-14b12485ae96">
-
-```
-y.shape
-```
-
-<img width="400" alt="image" src="https://github.com/user-attachments/assets/53f343a0-5102-4dac-9a01-242dafabdd92">
+<img width="600" alt="image" src="https://github.com/user-attachments/assets/904263a7-226f-4569-add9-f206542b141b">
 
 
 ```
-m=0
-c=0
-
-L=0.001
-epochs=5000
-
-n=float(len(x))
-error=[]
-
-for i in range(epochs):
-  y_pred=m*x+c
-  D_m=(-2/n)*sum(x*(y-y_pred))
-  D_c=(-2/n)*sum(y-y_pred)
-  m=m-L*D_m
-  c=c-L*D_c
-
-  error.append(sum(y-y_pred)**2)
-print(m,c)
-type(error)
-print(len(error))
-plt.plot(range(0,epochs),error)
+Scaler=StandardScaler()
+x1=x.astype(float)
+x1_Scaled=Scaler.fit_transform(x1)
+y1_Scaled=Scaler.fit_transform(y)
+print(x1_Scaled)
+print(y1_Scaled)
 ```
+<img width="750" alt="image" src="https://github.com/user-attachments/assets/3e4f179e-2437-467a-a446-a0b8388215a3">
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/b8d8f31d-1e99-4ba3-9a7b-10e0db3a8387">
-<img width="600" alt="image" src="https://github.com/user-attachments/assets/3cb9b564-238e-49cf-a3c0-a7d254c24040">
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/199a2dad-3535-4db8-bc9b-18463a632db0">
+<img width="750" alt="image" src="https://github.com/user-attachments/assets/9f3d88ef-d71e-4cf2-9cc0-ae9caed97c9b">
+
+```
+theta=multivariate_linear_regression(x1_Scaled,y1_Scaled)
+print(theta)
+```
+<img width="750" alt="image" src="https://github.com/user-attachments/assets/38dbe638-d0b4-4d07-bfd9-ed74415cc670">
 
 
 ## Result:
